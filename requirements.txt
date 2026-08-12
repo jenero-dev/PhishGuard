@@ -1,0 +1,43 @@
+# ---------------------------------------------------------------------------
+# Phishing Website Detection System - Python dependencies
+# Pinned to the versions the pipeline was developed and validated against.
+# Install with:  pip install -r requirements.txt
+# ---------------------------------------------------------------------------
+
+# --- Core data / numerical stack ---
+
+# --- Core data / numerical stack ---
+numpy>=1.26
+pandas>=2.1
+scipy>=1.11
+
+# --- Machine learning ---
+scikit-learn>=1.4          # classifiers, preprocessing, model selection
+xgboost>=2.0               # gradient boosted trees
+imbalanced-learn>=0.12     # SMOTE class balancing
+joblib>=1.3                # model (de)serialisation
+
+beautifulsoup4>=4.11.0
+python-whois>=0.8.0
+urllib3>=1.26.0
+
+
+# --- Explainable AI ---
+shap>=0.44                 # SHAP feature attributions
+
+# --- Feature extraction helpers ---
+tldextract>=5.1            # robust domain / suffix parsing
+requests>=2.31             # optional live URL checks
+
+# --- Visualisation (offline plot generation) ---
+matplotlib>=3.6.0
+seaborn>=0.12.0
+
+# --- Backend API ---
+fastapi>=0.110
+uvicorn[standard]>=0.29
+pydantic>=2.6
+python-multipart>=0.0.9  
+
+# --- Utilities ---
+tqdm>=4.66                 # progress bars during collection / training

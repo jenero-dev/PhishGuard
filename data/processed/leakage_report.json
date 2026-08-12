@@ -1,0 +1,26 @@
+{
+  "page_fetch_success": {
+    "phishing_mean": 0.7301,
+    "legit_mean": 0.7298,
+    "abs_diff": 0.0003,
+    "flag": "OK"
+  },
+  "http_status_category": {
+    "phishing_mean": 1.1581,
+    "legit_mean": 0.9767,
+    "abs_diff": 0.1814,
+    "flag": "OK"
+  },
+  "redirect_count": {
+    "phishing_mean": 0.175,
+    "legit_mean": 0.5736,
+    "abs_diff": 0.3986,
+    "flag": "POTENTIAL LEAKAGE"
+  },
+  "final_domain_changed": {
+    "phishing_mean": 0.0,
+    "legit_mean": 0.0,
+    "abs_diff": 0.0,
+    "flag": "OK"
+  }
+}

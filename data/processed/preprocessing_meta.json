@@ -1,0 +1,204 @@
+{
+  "num_features": 30,
+  "feature_names": [
+    "url_length",
+    "digit_ratio",
+    "special_char_ratio",
+    "url_entropy",
+    "has_ip_address",
+    "has_at_symbol",
+    "has_non_standard_port",
+    "uses_http",
+    "domain_age_days",
+    "registration_length_days",
+    "domain_expiry_proximity_days",
+    "whois_data_available",
+    "has_a_or_aaaa_record",
+    "has_ns_record",
+    "has_mx_record",
+    "num_name_servers",
+    "num_forms",
+    "has_password_field",
+    "has_identity_field",
+    "has_sensitive_input",
+    "has_external_form_action",
+    "has_insecure_form_action",
+    "credential_language_present",
+    "brand_domain_mismatch",
+    "num_iframes",
+    "hidden_or_suspicious_iframe",
+    "page_fetch_success",
+    "http_status_category",
+    "redirect_count",
+    "final_domain_changed"
+  ],
+  "train_samples": 6262,
+  "val_samples": 694,
+  "test_samples": 1159,
+  "train_class_dist": {
+    "0": 3131,
+    "1": 3131
+  },
+  "val_class_dist": {
+    "0": 423,
+    "1": 271
+  },
+  "test_class_dist": {
+    "0": 651,
+    "1": 508
+  },
+  "col_medians": {
+    "url_length": 25.0,
+    "digit_ratio": 0.0,
+    "special_char_ratio": 0.0,
+    "url_entropy": 3.9219280948873627,
+    "has_ip_address": 0.0,
+    "has_at_symbol": 0.0,
+    "has_non_standard_port": 0.0,
+    "uses_http": 0.0,
+    "domain_age_days": 0.0,
+    "registration_length_days": 0.0,
+    "domain_expiry_proximity_days": 0.0,
+    "whois_data_available": 0.0,
+    "has_a_or_aaaa_record": 1.0,
+    "has_ns_record": 1.0,
+    "has_mx_record": 1.0,
+    "num_name_servers": 4.0,
+    "num_forms": 0.0,
+    "has_password_field": 0.0,
+    "has_identity_field": 0.0,
+    "has_sensitive_input": 0.0,
+    "has_external_form_action": 0.0,
+    "has_insecure_form_action": 0.0,
+    "credential_language_present": 0.0,
+    "brand_domain_mismatch": 0.0,
+    "num_iframes": 0.0,
+    "hidden_or_suspicious_iframe": 0.0,
+    "page_fetch_success": 1.0,
+    "http_status_category": 1.0,
+    "redirect_count": 0.0,
+    "final_domain_changed": 0.0
+  },
+  "col_caps": {
+    "url_length": [
+      -46.0,
+      108.0
+    ],
+    "digit_ratio": [
+      -0.1875,
+      0.25
+    ],
+    "special_char_ratio": [
+      0.0,
+      0.0
+    ],
+    "url_entropy": [
+      1.9738662911665665,
+      5.96311045745545
+    ],
+    "has_ip_address": [
+      0.0,
+      0.0
+    ],
+    "has_at_symbol": [
+      0.0,
+      0.0
+    ],
+    "has_non_standard_port": [
+      0.0,
+      0.0
+    ],
+    "uses_http": [
+      0.0,
+      0.0
+    ],
+    "domain_age_days": [
+      0.0,
+      0.0
+    ],
+    "registration_length_days": [
+      0.0,
+      0.0
+    ],
+    "domain_expiry_proximity_days": [
+      0.0,
+      0.0
+    ],
+    "whois_data_available": [
+      0.0,
+      0.0
+    ],
+    "has_a_or_aaaa_record": [
+      1.0,
+      1.0
+    ],
+    "has_ns_record": [
+      1.0,
+      1.0
+    ],
+    "has_mx_record": [
+      -3.0,
+      4.0
+    ],
+    "num_name_servers": [
+      -4.0,
+      10.0
+    ],
+    "num_forms": [
+      0.0,
+      0.0
+    ],
+    "has_password_field": [
+      0.0,
+      0.0
+    ],
+    "has_identity_field": [
+      0.0,
+      0.0
+    ],
+    "has_sensitive_input": [
+      0.0,
+      0.0
+    ],
+    "has_external_form_action": [
+      0.0,
+      0.0
+    ],
+    "has_insecure_form_action": [
+      0.0,
+      0.0
+    ],
+    "credential_language_present": [
+      0.0,
+      0.0
+    ],
+    "brand_domain_mismatch": [
+      0.0,
+      0.0
+    ],
+    "num_iframes": [
+      0.0,
+      0.0
+    ],
+    "hidden_or_suspicious_iframe": [
+      0.0,
+      0.0
+    ],
+    "page_fetch_success": [
+      -3.0,
+      4.0
+    ],
+    "http_status_category": [
+      -3.0,
+      4.0
+    ],
+    "redirect_count": [
+      -3.0,
+      4.0
+    ],
+    "final_domain_changed": [
+      0.0,
+      0.0
+    ]
+  }
+}

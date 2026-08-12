@@ -1,0 +1,24 @@
+Classification Report: XGBoost
+==================================================
+
+Confusion Matrix:
+[[620  31]
+ [ 52 456]]
+
+Accuracy  : 0.9284
+Precision : 0.9363
+Recall    : 0.8976
+F1 Score  : 0.9166
+ROC AUC   : 0.9847
+FPR       : 0.0476
+FNR       : 0.1024
+
+CV F1 Mean : 0.9397
+CV F1 Std  : 0.0078
+
+Tuned Params : {'learning_rate': 0.1, 'max_depth': 6, 'n_estimators': 100}
+Tuned CV F1  : 0.9413
+
+Validation F1  : 0.9333
+Validation AUC : 0.9837
+Validation FPR : 0.0402

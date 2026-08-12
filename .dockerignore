@@ -1,0 +1,26 @@
+# --- Python caches ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# --- Virtual environments ---
+venv/
+.venv/
+env/
+
+# --- Runtime data that should NOT be baked into the image ---
+data/predictions.db
+logs/*.log
+nohup.out
+
+# --- OS / editor cruft ---
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# --- Version control ---
+.git/
+.gitignore

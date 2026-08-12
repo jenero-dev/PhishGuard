@@ -1,0 +1,21 @@
+Classification Report: MLP
+==================================================
+
+Confusion Matrix:
+[[632  19]
+ [ 43 465]]
+
+Accuracy  : 0.9465
+Precision : 0.9607
+Recall    : 0.9154
+F1 Score  : 0.9375
+ROC AUC   : 0.9892
+FPR       : 0.0292
+FNR       : 0.0846
+
+CV F1 Mean : 0.9428
+CV F1 Std  : 0.0108
+
+Validation F1  : 0.9369
+Validation AUC : 0.9865
+Validation FPR : 0.0165

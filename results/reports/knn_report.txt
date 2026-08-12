@@ -1,0 +1,21 @@
+Classification Report: KNN
+==================================================
+
+Confusion Matrix:
+[[613  38]
+ [ 60 448]]
+
+Accuracy  : 0.9154
+Precision : 0.9218
+Recall    : 0.8819
+F1 Score  : 0.9014
+ROC AUC   : 0.9615
+FPR       : 0.0584
+FNR       : 0.1181
+
+CV F1 Mean : 0.9319
+CV F1 Std  : 0.0075
+
+Validation F1  : 0.8902
+Validation AUC : 0.9601
+Validation FPR : 0.0520

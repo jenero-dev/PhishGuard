@@ -1,0 +1,21 @@
+Classification Report: Naive Bayes
+==================================================
+
+Confusion Matrix:
+[[624  27]
+ [ 90 418]]
+
+Accuracy  : 0.8991
+Precision : 0.9393
+Recall    : 0.8228
+F1 Score  : 0.8772
+ROC AUC   : 0.9655
+FPR       : 0.0415
+FNR       : 0.1772
+
+CV F1 Mean : 0.9074
+CV F1 Std  : 0.0081
+
+Validation F1  : 0.9067
+Validation AUC : 0.9721
+Validation FPR : 0.0520

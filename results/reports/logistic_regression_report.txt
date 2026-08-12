@@ -1,0 +1,24 @@
+Classification Report: Logistic Regression
+==================================================
+
+Confusion Matrix:
+[[604  47]
+ [ 44 464]]
+
+Accuracy  : 0.9215
+Precision : 0.9080
+Recall    : 0.9134
+F1 Score  : 0.9107
+ROC AUC   : 0.9831
+FPR       : 0.0722
+FNR       : 0.0866
+
+CV F1 Mean : 0.9263
+CV F1 Std  : 0.0128
+
+Tuned Params : {'C': 1.0, 'solver': 'liblinear'}
+Tuned CV F1  : 0.9266
+
+Validation F1  : 0.9299
+Validation AUC : 0.9779
+Validation FPR : 0.0449

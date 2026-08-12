@@ -1,0 +1,24 @@
+Classification Report: Random Forest
+==================================================
+
+Confusion Matrix:
+[[616  35]
+ [ 46 462]]
+
+Accuracy  : 0.9301
+Precision : 0.9296
+Recall    : 0.9094
+F1 Score  : 0.9194
+ROC AUC   : 0.9795
+FPR       : 0.0538
+FNR       : 0.0906
+
+CV F1 Mean : 0.9370
+CV F1 Std  : 0.0075
+
+Tuned Params : {'max_depth': 20, 'min_samples_split': 5, 'n_estimators': 100}
+Tuned CV F1  : 0.9400
+
+Validation F1  : 0.9346
+Validation AUC : 0.9781
+Validation FPR : 0.0331
