@@ -25,7 +25,7 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(
 logger = logging.getLogger(__name__)
 
 # ── Paths ────────────────────────────────────────────────────────────────────
-MODEL_PATH         = "models/best_model.pkl"
+MODEL_PATH         = "models/mlp.pkl"
 SCALER_PATH        = "data/processed/scaler.pkl"
 FEATURE_NAMES_PATH = "data/processed/feature_names.txt"
 TRAIN_X_PATH       = "data/processed/X_train.csv"
