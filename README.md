@@ -24,9 +24,10 @@ PhishGuard is an end-to-end machine-learning project for classifying URLs as leg
 ```
 ┌──────────────────┐   ┌──────────────────┐   ┌──────────────────┐
 │ 1. Data          │   │ 2. Feature       │   │ 3. Preprocessing │
-│    Collection    │──▶│    Extraction    │──▶│  (clean, scale,  │
-│ PhishTank +      │   │ 28 lexical/host  │   │   balance)       │
-│ Tranco/legit     │   │ URL features     │   │                  │
+│    Collection    │──▶│    Extraction    │──▶│  (clean, scale, │
+│PhishTank,        │   │                  │   │     balance)     │
+│  OpenPhish +     │   │ 28 lexical/host  │   │                  │
+│ Tranco & Alexa   │   │ URL features     │   │                  │
 └──────────────────┘   └──────────────────┘   └────────┬─────────┘
                                                         │
         ┌───────────────────────────────────────────────┘
@@ -59,7 +60,6 @@ phishing_detection_project/
 ├── api_test.py             # API smoke-test script
 ├── frontend/
 │   └── index.html           # React dashboard (CDN React + Tailwind + Chart.js)
-├── requirements.txt
 ├── Dockerfile
 ├── docker-compose.yml
 ├── .dockerignore
@@ -74,7 +74,8 @@ phishing_detection_project/
 
 ## Dataset and Splits
 
-The dataset contains **8,115 labelled URLs**. Label `0` denotes a legitimate URL and label `1` denotes a phishing URL.
+**10,000 labelled URLs** were collected from PhishTank, OpenPhish, Tranco & Alexa Topsites (5,000 Phishing & 5,000 Legitimate)
+After Preprocessing the dataset contains **8,115 labelled URLs**. Label `0` denotes a legitimate URL and label `1` denotes a phishing URL.
 
 | Partition | Instances | Legitimate | Phishing |
 |---|---:|---:|---:|
@@ -205,6 +206,14 @@ SHAP (SHapley Additive exPlanations) is used to inspect how features contribute 
 - `results/shap/shap_summary_decision_tree.png`
 - `results/shap/shap_bar_svm.png`
 - `results/shap/shap_summary_svm.png`
+- `results/shap/shap_bar_knn.png`
+- `results/shap/shap_summary_knn.png`
+- `results/shap/shap_bar_mlp.png`
+- `results/shap/shap_summary_mlp.png`
+- `results/shap/shap_bar_logistic_regression.png`
+- `results/shap/shap_summary_logistic_regression.png`
+- `results/shap/shap_bar_naive_bayes.png`
+- `results/shap/shap_summary_naive_bayes.png`
 
 A SHAP bar plot ranks features by mean absolute contribution. A SHAP summary plot additionally shows the direction and distribution of contribution across observations. These explanations are model-specific and should only be interpreted against the exact feature schema used by the corresponding trained model.
 
