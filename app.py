@@ -19,22 +19,23 @@ from fastapi.responses import FileResponse, HTMLResponse
 from pydantic import BaseModel
 
 from feature_extractor import FeatureExtractor
+from shap_analyzer import ShapAnalyzer  # <-- ADDED
 
-# ── Logging ──────────────────────────────────────────────────────────────────
+# ── Logging ────
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
-# ── Paths ────────────────────────────────────────────────────────────────────
+# ── Paths ────
 MODEL_PATH         = "models/mlp.pkl"
 SCALER_PATH        = "data/processed/scaler.pkl"
 FEATURE_NAMES_PATH = "data/processed/feature_names.txt"
 TRAIN_X_PATH       = "data/processed/X_train.csv"
-INDEX_HTML         = "index.html"
+INDEX_HTML         = "frontend/index.html"
 
-# ── FastAPI app ─────────────────────────────────────────────────────────────
+# ── FastAPI app ────
 app = FastAPI(
     title="PhishGuard API",
-    description="MSc Cybersecurity — Phishing Website Detection",
+    description="MSc Information Technology — Phishing Website Detection",
     version="2.0.0",
 )
 
@@ -45,7 +46,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# ── In-memory stores ─────────────────────────────────────────────────────────
+# ── In-memory stores ────
 _history: deque = deque(maxlen=500)
 _stats = {
     "total_scans": 0,
@@ -55,7 +56,7 @@ _stats = {
     "daily": {},
 }
 
-# ── Helpers ──────────────────────────────────────────────────────────────────
+# ── Helpers ────
 def load_feature_names(path: str) -> List[str]:
     if not os.path.exists(path):
         raise FileNotFoundError(f"Feature names file not found: {path}")
@@ -110,7 +111,7 @@ def record_prediction(entry: dict):
     bucket["phishing" if entry["is_phishing"] else "legitimate"] += 1
 
 
-# ── Load artefacts at startup ────────────────────────────────────────────────
+# ── Load artefacts at startup ────
 logger.info("Loading model artefacts...")
 for p in (MODEL_PATH, SCALER_PATH, FEATURE_NAMES_PATH):
     if not os.path.exists(p):
@@ -122,67 +123,47 @@ trained_features = load_feature_names(FEATURE_NAMES_PATH)
 feature_defaults = compute_defaults(TRAIN_X_PATH, trained_features)
 extractor        = FeatureExtractor()
 
-# ── Global SHAP (XGBoost-safe) ───────────────────────────────────────────────
+# ── Global SHAP via ShapAnalyzer (correctly handles MLP with KernelExplainer) ────
 _global_shap: Optional[Dict[str, float]] = None
+_shap_analyzer: Optional[ShapAnalyzer] = None
 
 try:
-    import shap
-
     if os.path.exists(TRAIN_X_PATH):
         df_bg = pd.read_csv(TRAIN_X_PATH, usecols=trained_features).fillna(0).astype(float)
         sample_n = min(200, len(df_bg))
         bg_raw = df_bg.sample(sample_n, random_state=42)
         X_bg = scaler.transform(bg_raw)
 
-        # ── XGBoost / Tree-based models → TreeExplainer (exact, fast) ──
-        model_name = type(model).__name__.lower()
-        is_tree = (
-            hasattr(model, "get_booster")
-            or "xgb" in model_name
-            or "lgbm" in model_name
-            or "catboost" in model_name
-            or "randomforest" in model_name
-            or "decisiontree" in model_name
-            or "gradientboosting" in model_name
-            or "extratrees" in model_name
+        _shap_analyzer = ShapAnalyzer(
+            model,
+            trained_features,
+            background=X_bg,
+            max_background=100,
         )
 
-        if is_tree:
-            explainer = shap.TreeExplainer(model)
-            sv = explainer.shap_values(X_bg)
+        # Generate global importance; this also writes shap_summary_mlp.png / shap_bar_mlp.png
+        global_out_dir = "results/shap"
+        os.makedirs(global_out_dir, exist_ok=True)
+        _global_shap = _shap_analyzer.global_summary(
+            X_bg,
+            out_dir=global_out_dir,
+            tag="mlp",
+            max_samples=200,
+        )
 
-            # XGBoost binary classifier returns list [neg_class, pos_class]
-            if isinstance(sv, list):
-                sv = np.array(sv[1])
-            elif isinstance(sv, np.ndarray) and sv.ndim == 3:
-                sv = sv[:, :, 1]   # (samples, features, 2) -> take class 1
-        else:
-            # Fallback for non-tree models (SVM, logistic, etc.)
-            explainer = shap.Explainer(model, X_bg, feature_names=trained_features)
-            sv = explainer(X_bg)
-            if sv.values.ndim == 3:
-                sv = np.array(sv.values)[:, :, 1]
-            else:
-                sv = np.array(sv.values)
-
-        mean_abs = np.abs(sv).mean(axis=0)
-        _global_shap = dict(sorted(
-            zip(trained_features, mean_abs.tolist()),
-            key=lambda x: x[1], reverse=True
-        ))
-        logger.info("Global SHAP importance computed for %d features.", len(_global_shap))
-
+        logger.info("Global SHAP importance computed for %d features.", len(_global_shap or {}))
 except Exception as e:
     logger.warning("Global SHAP skipped: %s", e)
     import traceback
     logger.debug(traceback.format_exc())
 
-# ── Pydantic models ──────────────────────────────────────────────────────────
+
+# ── Pydantic models ────
 class URLRequest(BaseModel):
     url: str
 
 
-# ── Core prediction logic (shared) ───────────────────────────────────────────
+# ── Core prediction logic (shared) ────
 def _predict(url: str) -> dict:
     if not url.startswith(("http://", "https://")):
         url = "http://" + url
@@ -220,7 +201,7 @@ def _predict(url: str) -> dict:
     }
 
 
-# ── Endpoints ────────────────────────────────────────────────────────────────
+# ── Endpoints ────
 @app.get("/")
 @app.get("/app")
 @app.get("/app/")
@@ -234,8 +215,8 @@ async def serve_frontend():
 async def predict(request: URLRequest):
     try:
         result = _predict(request.url.strip())
-        X_scaled = result.pop("_X_scaled")
-        result.pop("_df_raw")
+        result.pop("_X_scaled", None)
+        result.pop("_df_raw", None)
 
         ts = datetime.now(timezone.utc).isoformat()
         entry = {**result, "id": str(uuid.uuid4()), "timestamp": ts}
@@ -253,48 +234,21 @@ async def explain(request: URLRequest, top_k: int = Query(default=8, ge=1, le=30
     try:
         result = _predict(request.url.strip())
         X_scaled = result.pop("_X_scaled")
-        result.pop("_df_raw")
+        result.pop("_df_raw", None)
 
         contributions = []
         try:
-            import shap
-
-            # Use the same explainer logic as startup
-            model_name = type(model).__name__.lower()
-            is_tree = (
-                hasattr(model, "get_booster")
-                or "xgb" in model_name
-                or "lgbm" in model_name
-                or "catboost" in model_name
-                or "randomforest" in model_name
-                or "decisiontree" in model_name
-                or "gradientboosting" in model_name
-                or "extratrees" in model_name
-            )
-
-            if is_tree:
-                explainer = shap.TreeExplainer(model)
-                sv = explainer.shap_values(X_scaled)
-                if isinstance(sv, list):
-                    sv = np.array(sv[1])[0]
-                elif isinstance(sv, np.ndarray) and sv.ndim == 3:
-                    sv = sv[0, :, 1]
-                else:
-                    sv = sv[0]
+            if _shap_analyzer is not None and _shap_analyzer.explainer is not None:
+                explanation = _shap_analyzer.explain_instance(X_scaled[0], top_k=top_k)
+                contributions = [
+                    {
+                        "feature": c["feature"],
+                        "shap_value": round(c["shap_value"], 5),
+                    }
+                    for c in explanation["contributions"]
+                ]
             else:
-                # Need a background matrix for KernelExplainer or similar
-                bg_size = min(100, len(trained_features))
-                bg = np.zeros((bg_size, len(trained_features)))
-                explainer = shap.Explainer(model, bg, feature_names=trained_features)
-                sv = explainer(X_scaled)
-                if sv.values.ndim == 3:
-                    sv = np.array(sv.values)[0, :, 1]
-                else:
-                    sv = np.array(sv.values)[0]
-
-            pairs = sorted(zip(trained_features, sv.tolist()), key=lambda x: abs(x[1]), reverse=True)
-            contributions = [{"feature": f, "shap_value": round(v, 5)} for f, v in pairs[:top_k]]
-
+                logger.warning("Per-URL SHAP skipped: no SHAP analyzer available")
         except Exception as e:
             logger.warning("Per-URL SHAP failed: %s", e)
 
@@ -351,7 +305,7 @@ async def model_info():
     }
 
 
-# ── Entry point ──────────────────────────────────────────────────────────────
+# ── Entry point ────
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("app:app", host="0.0.0.0", port=8000, reload=False, log_level="info")
